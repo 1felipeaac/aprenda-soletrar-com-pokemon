@@ -121,6 +121,12 @@ export const Arena: React.FC<ArenaProps> = ({
       // ACERTOU UMA ÚNICA VEZ
       hasHandledSuccessRef.current = true;
       setIsSuccess(true);
+
+      // Cancela qualquer som ou locução prévia (ex: clique na última sílaba)
+      soundService.stopCry();
+      speechService.cancel();
+
+      // Toca apenas a fanfarra comemorativa de vitória
       soundService.playFanfare();
 
       // Chuva de confetes
@@ -134,8 +140,6 @@ export const Arena: React.FC<ArenaProps> = ({
       } catch {}
 
       onCaptureRef.current(currentPokemon.id);
-
-      speechService.speakPokemonName(currentPokemon.name, currentPokemon.syllables);
     } else {
       // ERRO PEDAGÓGICO / ORDEM INVERTIDA
       const formedWord = filledSyllables.join('');
@@ -230,6 +234,8 @@ export const Arena: React.FC<ArenaProps> = ({
 
   // Navegar entre Pokémon do mesmo mundo
   const handleNextPokemon = () => {
+    soundService.stopCry();
+    speechService.cancel();
     if (currentIndex < pokemonList.length - 1) {
       soundService.playPop();
       setCurrentIndex(currentIndex + 1);
@@ -240,6 +246,8 @@ export const Arena: React.FC<ArenaProps> = ({
   };
 
   const handlePrevPokemon = () => {
+    soundService.stopCry();
+    speechService.cancel();
     if (currentIndex > 0) {
       soundService.playPop();
       setCurrentIndex(currentIndex - 1);
@@ -487,7 +495,11 @@ export const Arena: React.FC<ArenaProps> = ({
                 {currentIndex < pokemonList.length - 1 ? 'Próximo Pokémon! ⚡' : 'Concluir Mundo! 🏆'}
               </button>
               <button
-                onClick={onBackToWorlds}
+                onClick={() => {
+                  soundService.stopCry();
+                  speechService.cancel();
+                  onBackToWorlds();
+                }}
                 className="w-full sm:w-auto bg-amber-100 hover:bg-amber-200 text-amber-950 font-black py-3.5 px-5 rounded-2xl border-2 border-amber-300 transition-transform active:scale-95 cursor-pointer text-sm"
               >
                 Voltar ao Mapa
