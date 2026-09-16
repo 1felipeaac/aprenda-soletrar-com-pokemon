@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    background-color: #fefce8;
+    color: #1e293b;
+    font-family: 'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    user-select: none;
+    -webkit-user-select: none;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+}
+
+/* Animações lúdicas */
+@keyframes bounce-gentle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes shake-wiggle {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px) rotate(-3deg); }
+  40%, 80% { transform: translateX(8px) rotate(3deg); }
+}
+
+.animate-gentle-bounce {
+  animation: bounce-gentle 2.5s infinite ease-in-out;
+}
+
+.animate-wiggle {
+  animation: shake-wiggle 0.5s ease-in-out;
+}
+
