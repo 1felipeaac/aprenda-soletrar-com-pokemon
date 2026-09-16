@@ -7,17 +7,16 @@ import { Volume2, Sparkles, RotateCcw } from 'lucide-react';
 
 interface PokedexProps {
   progress: PlayerProgress;
-  onResetProgress: () => void;
+  onOpenReset: () => void;
   onSelectPokemonToPlay: (worldId: number, pokemonIndex: number) => void;
 }
 
 export const Pokedex: React.FC<PokedexProps> = ({
   progress,
-  onResetProgress,
+  onOpenReset,
   onSelectPokemonToPlay,
 }) => {
   const [selectedWorldFilter, setSelectedWorldFilter] = useState<number | null>(null);
-  const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   const capturedCount = Object.keys(progress.captured).length;
   const totalCount = ALL_POKEMON.length;
@@ -199,47 +198,16 @@ export const Pokedex: React.FC<PokedexProps> = ({
         })}
       </div>
 
-      {/* Rodapé com Botão de Reiniciar Progresso (para os pais) */}
+      {/* Rodapé com Botão de Reiniciar Progresso (para os pais com Trava Parental) */}
       <div className="pt-6 text-center border-t-2 border-amber-200">
         <button
-          onClick={() => setShowResetConfirm(true)}
-          className="text-xs font-bold text-slate-400 hover:text-rose-600 flex items-center gap-1 mx-auto cursor-pointer transition-colors"
+          onClick={onOpenReset}
+          className="text-xs font-black text-slate-500 hover:text-rose-600 flex items-center justify-center gap-1.5 mx-auto cursor-pointer transition-all px-4 py-2 rounded-2xl bg-amber-100/60 hover:bg-rose-50 border border-amber-200 hover:border-rose-300 active:scale-95 shadow-2xs"
         >
-          <RotateCcw className="w-3.5 h-3.5" />
-          <span>Reiniciar álbum da Pokédex</span>
+          <RotateCcw className="w-4 h-4 text-amber-800" />
+          <span>Zerar álbum da Pokédex (Área dos Pais)</span>
         </button>
       </div>
-
-      {/* Modal de Confirmação de Reset */}
-      {showResetConfirm && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl border-4 border-rose-400 p-6 max-w-sm w-full text-center shadow-2xl space-y-4">
-            <h3 className="text-xl font-black text-rose-950">
-              Reiniciar o álbum?
-            </h3>
-            <p className="text-xs font-bold text-slate-600">
-              Isso vai zerar os Pokémon capturados para começar a brincadeira do zero.
-            </p>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => {
-                  onResetProgress();
-                  setShowResetConfirm(false);
-                }}
-                className="flex-1 bg-rose-500 hover:bg-rose-600 text-white font-black py-2.5 rounded-2xl cursor-pointer text-sm"
-              >
-                Sim, reiniciar
-              </button>
-              <button
-                onClick={() => setShowResetConfirm(false)}
-                className="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-800 font-black py-2.5 rounded-2xl cursor-pointer text-sm"
-              >
-                Cancelar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

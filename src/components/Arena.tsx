@@ -308,8 +308,8 @@ export const Arena: React.FC<ArenaProps> = ({
           </div>
         )}
 
-        {/* Botão de Ouvir Nome e Botão de Dica */}
-        <div className="flex items-center justify-center gap-3 mt-1">
+        {/* Botão de Ouvir Nome e Botão de Dica com Altura e Alinhamento Perfeitos */}
+        <div className="flex items-center justify-center gap-2 sm:gap-3 mt-2 w-full max-w-sm mx-auto">
           <button
             onClick={async () => {
               soundService.stopCry();
@@ -318,9 +318,9 @@ export const Arena: React.FC<ArenaProps> = ({
               await new Promise((r) => setTimeout(r, 250));
               await speechService.speakPokemonName(currentPokemon.name, currentPokemon.syllables);
             }}
-            className="flex items-center gap-2 bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-500 hover:to-yellow-600 text-amber-950 font-black px-5 py-2.5 rounded-2xl shadow-md border-2 border-amber-500 transition-transform active:scale-95 cursor-pointer text-sm sm:text-base uppercase tracking-wider"
+            className="flex-1 h-11 sm:h-12 flex items-center justify-center gap-1.5 sm:gap-2 bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-500 hover:to-yellow-600 text-amber-950 font-black px-3 sm:px-4 rounded-2xl shadow-md border-2 border-amber-500 transition-transform active:scale-95 cursor-pointer text-xs sm:text-sm uppercase tracking-wider whitespace-nowrap"
           >
-            <Volume2 className="w-5 h-5 text-amber-950 fill-amber-950" />
+            <Volume2 className="w-4 h-4 sm:w-5 sm:h-5 text-amber-950 fill-amber-950 shrink-0" />
             <span>Ouvir Nome</span>
           </button>
 
@@ -332,10 +332,10 @@ export const Arena: React.FC<ArenaProps> = ({
               speechService.speakHint(currentPokemon.hint, currentPokemon.name);
               setFunnyFeedback(currentPokemon.hint);
             }}
-            className="flex items-center gap-1.5 bg-sky-100 hover:bg-sky-200 text-sky-900 font-extrabold px-3.5 py-2.5 rounded-2xl shadow-sm border-2 border-sky-300 transition-transform active:scale-95 cursor-pointer text-sm"
+            className="h-11 sm:h-12 flex items-center justify-center gap-1.5 bg-sky-100 hover:bg-sky-200 text-sky-900 font-extrabold px-3.5 sm:px-4 rounded-2xl shadow-sm border-2 border-sky-300 transition-transform active:scale-95 cursor-pointer text-xs sm:text-sm whitespace-nowrap shrink-0"
             title="Dica de som"
           >
-            <Lightbulb className="w-5 h-5 text-amber-500 fill-amber-400" />
+            <Lightbulb className="w-4 h-4 sm:w-5 sm:h-5 text-amber-500 fill-amber-400 shrink-0" />
             <span>Dica</span>
           </button>
         </div>

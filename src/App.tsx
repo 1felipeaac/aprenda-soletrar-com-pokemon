@@ -4,6 +4,7 @@ import { WorldSelect } from './components/WorldSelect';
 import { Arena } from './components/Arena';
 import { Pokedex } from './components/Pokedex';
 import { Footer } from './components/Footer';
+import { ResetGameModal } from './components/ResetGameModal';
 import type { PlayerProgress } from './types/pokemon';
 import { WORLDS_DATA, ALL_POKEMON } from './data/pokemonData';
 import { storageService } from './services/storageService';
@@ -13,6 +14,9 @@ export function App() {
   const [currentView, setCurrentView] = useState<'worlds' | 'arena' | 'pokedex'>('worlds');
   const [activeWorldId, setActiveWorldId] = useState<number>(1);
   const [activePokemonIndex, setActivePokemonIndex] = useState<number>(0);
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
   const activeWorld = WORLDS_DATA.find((w) => w.id === activeWorldId) || WORLDS_DATA[0];
   const capturedCount = Object.keys(progress.captured).length;
   const totalPokemonCount = ALL_POKEMON.length;
@@ -35,10 +39,15 @@ export function App() {
     [progress.captured]
   );
 
-  const handleResetProgress = () => {
-    const reset = storageService.resetProgress();
-    setProgress(reset);
+  const handleResetComplete = () => {
+    setProgress(storageService.getProgress());
     setCurrentView('worlds');
+    setActiveWorldId(1);
+    setActivePokemonIndex(0);
+    setToastMessage('✨ Jogo zerado com sucesso! Uma nova aventura Pokémon começou.');
+    setTimeout(() => {
+      setToastMessage(null);
+    }, 4500);
   };
 
   const handleSelectPokemonToPlay = (worldId: number, pokemonIndex: number) => {
@@ -55,6 +64,7 @@ export function App() {
         capturedCount={capturedCount}
         totalCount={totalPokemonCount}
         currentWorldTitle={currentView === 'arena' ? activeWorld.title : undefined}
+        onOpenReset={() => setIsResetModalOpen(true)}
       />
 
       <main className="flex-1 w-full pb-10">
@@ -79,11 +89,37 @@ export function App() {
         {currentView === 'pokedex' && (
           <Pokedex
             progress={progress}
-            onResetProgress={handleResetProgress}
+            onOpenReset={() => setIsResetModalOpen(true)}
             onSelectPokemonToPlay={handleSelectPokemonToPlay}
           />
         )}
       </main>
+
+      {/* Modal de Reset com Trava Parental (Desafio Matemático) */}
+      {isResetModalOpen && (
+        <ResetGameModal
+          isOpen={isResetModalOpen}
+          onClose={() => setIsResetModalOpen(false)}
+          onResetComplete={handleResetComplete}
+        />
+      )}
+
+      {/* Toast Alert Flutuante de Confirmação */}
+      {toastMessage && (
+        <div className="fixed bottom-6 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-md z-50 bg-emerald-600 text-white px-4 py-3.5 rounded-2xl shadow-2xl flex items-center justify-between gap-3 border-2 border-emerald-300 animate-bounce">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <span className="text-2xl shrink-0">🎉</span>
+            <span className="text-xs sm:text-sm font-black leading-snug">{toastMessage}</span>
+          </div>
+          <button
+            onClick={() => setToastMessage(null)}
+            className="text-white hover:text-emerald-200 font-black text-sm cursor-pointer p-1 shrink-0"
+            title="Fechar aviso"
+          >
+            ✕
+          </button>
+        </div>
+      )}
 
       <Footer />
     </div>
