@@ -173,12 +173,21 @@ async function main() {
   console.log('\n🐾 Verificando Pokémon cadastrados no código...');
   const pokemonList = extractPokemonFromData();
 
+  function getSpokenSyllable(syl) {
+    const clean = syl.trim().toUpperCase();
+    if (UNIVERSAL_SYLLABLES[clean]) {
+      return UNIVERSAL_SYLLABLES[clean];
+    }
+    return clean.charAt(0) + clean.slice(1).toLowerCase();
+  }
+
   for (const poke of pokemonList) {
     const dest = path.join(pokemonDir, `${poke.name}.mp3`);
     if (fs.existsSync(dest)) {
       skippedCount++;
     } else {
-      const cadenceText = `${poke.syllables.join('... ')}! ${poke.displayName}!`;
+      const spokenSyllables = poke.syllables.map(getSpokenSyllable);
+      const cadenceText = `${spokenSyllables.join('... ')}! ${poke.displayName}!`;
       process.stdout.write(`  + Baixando áudio do Pokémon: ${poke.name} ("${cadenceText}")... `);
       const activeTTS = await getTTS();
       await generateClip(activeTTS, cadenceText, dest);

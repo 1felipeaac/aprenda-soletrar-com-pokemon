@@ -1,12 +1,10 @@
-import { Volume2, VolumeX, ArrowLeft, BookOpen } from 'lucide-react';
+import { ArrowLeft, BookOpen } from 'lucide-react';
 
 interface NavbarProps {
   currentView: 'worlds' | 'arena' | 'pokedex';
   onNavigate: (view: 'worlds' | 'arena' | 'pokedex') => void;
   capturedCount: number;
   totalCount: number;
-  soundEnabled: boolean;
-  onToggleSound: () => void;
   currentWorldTitle?: string;
 }
 
@@ -15,8 +13,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   onNavigate,
   capturedCount,
   totalCount,
-  soundEnabled,
-  onToggleSound,
   currentWorldTitle,
 }) => {
   return (
@@ -70,19 +66,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span className="bg-white/30 text-white text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 rounded-full font-extrabold shrink-0">
               {capturedCount}/{totalCount}
             </span>
-          </button>
-
-          {/* Botão de Som */}
-          <button
-            onClick={onToggleSound}
-            className="bg-amber-100 hover:bg-amber-200 text-amber-900 p-1.5 sm:p-2.5 rounded-xl sm:rounded-2xl border-2 border-amber-300 shadow-sm transition-transform active:scale-95 cursor-pointer shrink-0"
-            title={soundEnabled ? 'Desativar som' : 'Ativar som'}
-          >
-            {soundEnabled ? (
-              <Volume2 className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600" />
-            ) : (
-              <VolumeX className="w-4 h-4 sm:w-5 sm:h-5 text-rose-500" />
-            )}
           </button>
         </div>
       </div>

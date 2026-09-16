@@ -7,15 +7,12 @@ import { Footer } from './components/Footer';
 import type { PlayerProgress } from './types/pokemon';
 import { WORLDS_DATA, ALL_POKEMON } from './data/pokemonData';
 import { storageService } from './services/storageService';
-import { speechService } from './services/speechService';
 
 export function App() {
   const [progress, setProgress] = useState<PlayerProgress>(() => storageService.getProgress());
   const [currentView, setCurrentView] = useState<'worlds' | 'arena' | 'pokedex'>('worlds');
   const [activeWorldId, setActiveWorldId] = useState<number>(1);
   const [activePokemonIndex, setActivePokemonIndex] = useState<number>(0);
-  const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
-
   const activeWorld = WORLDS_DATA.find((w) => w.id === activeWorldId) || WORLDS_DATA[0];
   const capturedCount = Object.keys(progress.captured).length;
   const totalPokemonCount = ALL_POKEMON.length;
@@ -50,16 +47,6 @@ export function App() {
     setCurrentView('arena');
   };
 
-  const toggleSound = () => {
-    setSoundEnabled((prev) => {
-      const next = !prev;
-      if (!next) {
-        speechService.cancel();
-      }
-      return next;
-    });
-  };
-
   return (
     <div className="min-h-screen bg-amber-50 text-slate-800 flex flex-col font-sans selection:bg-amber-300">
       <Navbar
@@ -67,8 +54,6 @@ export function App() {
         onNavigate={setCurrentView}
         capturedCount={capturedCount}
         totalCount={totalPokemonCount}
-        soundEnabled={soundEnabled}
-        onToggleSound={toggleSound}
         currentWorldTitle={currentView === 'arena' ? activeWorld.title : undefined}
       />
 
